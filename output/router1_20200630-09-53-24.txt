@@ -1,0 +1,52 @@
+{
+    "l3_interfaces": [
+        {
+            "ipv4": [
+                {
+                    "address": "10.0.1.1 255.255.255.0"
+                }
+            ],
+            "name": "loopback0"
+        },
+        {
+            "ipv4": [
+                {
+                    "address": "10.11.0.99 255.255.255.255"
+                }
+            ],
+            "name": "loopback99"
+        },
+        {
+            "ipv4": [
+                {
+                    "address": "10.1.2.1 255.255.255.0"
+                }
+            ],
+            "name": "GigabitEthernet0/0"
+        },
+        {
+            "ipv4": [
+                {
+                    "address": "dhcp"
+                }
+            ],
+            "name": "GigabitEthernet0/1"
+        },
+        {
+            "ipv4": [
+                {
+                    "address": "10.1.6.1 255.255.255.0"
+                }
+            ],
+            "name": "GigabitEthernet0/2"
+        },
+        {
+            "ipv4": [
+                {
+                    "address": "192.168.1.1 255.255.255.0"
+                }
+            ],
+            "name": "GigabitEthernet0/3"
+        }
+    ]
+}

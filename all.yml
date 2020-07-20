@@ -1,0 +1,24 @@
+---
+- hosts: router1
+  connection: local
+  vars:
+  tasks:
+    #- name: ssh facts
+    #  register: iosfacts_out
+    #  ios_facts:
+    #    provider: "{{ credentials }}"
+    #- copy: content="{{ iosfacts_out | to_nice_json }}" dest="out/{{inventory_hostname}}_iosfacts.json"
+
+    - name: Gather only the interfaces resource facts and no legacy facts
+      ios_facts:
+        gather_subset: min
+        gather_network_resources: l2_interfaces
+
+    - name: get timestamp
+      command: date +%Y%m%d-%H-%M-%S
+      register: timestamp
+      
+    - name: push data
+      copy:
+        content: "{{ ansible_network_resources | to_nice_json }}"
+        dest: "./output/{{ inventory_hostname }}_{{ timestamp.stdout }}.txt"

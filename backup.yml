@@ -1,0 +1,10 @@
+---
+- name: Backup show run (enable mode commands)
+  hosts: ospf
+  gather_facts: true
+  connection: local
+
+  tasks:
+    - name: backup routers
+      ios_config:
+        backup: yes

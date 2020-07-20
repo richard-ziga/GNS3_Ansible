@@ -1,0 +1,21 @@
+---
+- name: Get current Traffic
+  hosts: switch
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: show interface Eth1/46
+      nxos_command:
+        commands: show interface Eth1/46 | inc input | inc output | inc rate   
+      register: print_output
+
+    - name: debug_output
+      debug:
+        msg: {{print_output.stdout_lines}}
+
+    - name: save output to  file
+      copy:
+        content: "{{ print_output.stdout_lines[0] }}"
+        dest: /etc/ansible/{{inventory_hostname}}_showtraffic.txt
+        

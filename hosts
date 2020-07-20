@@ -1,0 +1,13 @@
+[ospf]
+router1
+router2
+router3
+router4
+router5
+router6
+
+[ospf:vars]
+ansible_user=gns3
+ansible_password=gns3
+ansible_connection=network_cli
+ansible_network_os=ios

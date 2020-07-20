@@ -1,0 +1,203 @@
+Building configuration...
+
+Current configuration : 4729 bytes
+!
+! Last configuration change at 20:16:43 UTC Mon Jun 29 2020
+!
+version 15.6
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname router2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable password pass
+!
+aaa new-model
+!
+!
+aaa group server tacacs+ gns3group
+ server name container
+!
+aaa authentication login default group gns3group local
+aaa authentication login CONSOLE none
+aaa authorization exec default group gns3group local 
+aaa authorization commands 15 default group gns3group if-authenticated 
+!
+!
+!
+!
+!
+aaa session-id common
+ethernet lmi ce
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name gns3ansible.lab
+ip name-server 192.168.1.10
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+username rich privilege 15 password 0 pass
+!
+redundancy
+!
+no cdp log mismatch duplex
+!
+ip tcp synwait-time 5
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.0.2.1 255.255.255.0
+ ip ospf network point-to-point
+!
+interface Loopback99
+ ip address 10.11.0.99 255.255.255.255
+ ip access-group 2010 in
+ no ip proxy-arp
+ ip flow ingress
+!
+interface GigabitEthernet0/0
+ ip address 10.2.3.2 255.255.255.0
+ ip ospf network point-to-point
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip address 10.1.2.2 255.255.255.0
+ ip ospf network point-to-point
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip address 10.2.4.2 255.255.255.0
+ ip ospf network point-to-point
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ ip address 10.2.6.2 255.255.255.0
+ ip ospf network point-to-point
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router ospf 1
+ router-id 10.0.2.1
+ area 4369 nssa
+ network 10.0.2.0 0.0.0.255 area 0
+ network 10.1.2.0 0.0.0.255 area 4369
+ network 10.2.3.0 0.0.0.255 area 3
+ network 10.2.4.0 0.0.0.255 area 0
+ network 10.2.6.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip ssh version 2
+!
+logging source-interface Loopback0
+logging host 192.168.1.20
+!
+!
+tacacs server container
+ address ipv4 192.168.1.11
+ key gns3
+access-list 2010 remark This is the bulk-10 queue  v1.1
+access-list 2010 remark This is a GLOBAL acl never to be modified
+access-list 2010 remark Printer application
+access-list 2010 permit tcp any any eq lpd
+access-list 2010 permit tcp any eq lpd any
+access-list 2010 remark NAV app
+access-list 2010 permit udp any eq 38293 any
+access-list 2010 permit udp any any eq 38293
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ login authentication CONSOLE
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 4
+ transport input all
+!
+no scheduler allocate
+!
+end

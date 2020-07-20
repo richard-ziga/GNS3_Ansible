@@ -1,0 +1,24 @@
+---
+- hosts: ospf
+  connection: local
+  vars:
+  tasks:
+    #- name: ssh facts
+    #  register: iosfacts_out
+    #  ios_facts:
+    #    provider: "{{ credentials }}"
+    #- copy: content="{{ iosfacts_out | to_nice_json }}" dest="out/{{inventory_hostname}}_iosfacts.json"
+
+    # Collect only the config and default facts
+    - ios_facts:
+        gather_subset:
+          - config
+
+    - name: get timestamp
+      command: date +%Y%m%d-%H-%M-%S
+      register: timestamp
+      
+    - name: push data
+      copy:
+        content: "{{ ansible_network_resources | to_nice_json }}"
+        dest: "./output/{{ inventory_hostname }}_{{ timestamp.stdout }}.txt"
